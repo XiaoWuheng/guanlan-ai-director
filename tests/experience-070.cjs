@@ -14,13 +14,19 @@ const {_electron:electron}=require('playwright-core'),assert=require('node:asser
  const pages=await p.locator('#nav [data-page]').evaluateAll(xs=>xs.map(x=>x.dataset.page));for(const page of pages){await p.evaluate(page=>act('page',{page}),page);assert.equal(await p.evaluate(()=>S.page),page);assert.ok((await p.locator('#content').textContent()).length>20);}
  await p.evaluate(()=>{if($('modal').open)closeModal();});
  await p.evaluate(()=>act('page',{page:'dashboard'}));
- if(await p.evaluate(()=>Boolean(PRODUCT.personal.sidebarCollapsed)))await p.locator('#nav-collapse').click();
- await p.locator('#nav-collapse').click();
- await p.waitForFunction(()=>Boolean(PRODUCT.personal.sidebarCollapsed)&&document.body.classList.contains('nav-collapsed'));
- assert.ok((await p.locator('.shell>aside').boundingBox()).width<=64);
- await p.locator('#nav-collapse').click();
- await p.waitForFunction(()=>!PRODUCT.personal.sidebarCollapsed&&!document.body.classList.contains('nav-collapsed'));
- checks.push('全局页面入口与侧栏收起展开');
+ if(await p.evaluate(()=>innerWidth<1400)){
+  await p.locator('#nav-collapse').click();
+  await p.waitForFunction(()=>$('modal').open&&$('modal-title').textContent==='创作方式与资料');
+  await p.evaluate(()=>closeModal());
+ }else{
+  if(await p.evaluate(()=>Boolean(PRODUCT.personal.sidebarCollapsed)))await p.locator('#nav-collapse').click();
+  await p.locator('#nav-collapse').click();
+  await p.waitForFunction(()=>Boolean(PRODUCT.personal.sidebarCollapsed)&&document.body.classList.contains('nav-collapsed'));
+  assert.ok((await p.locator('.shell>aside').boundingBox()).width<=64);
+  await p.locator('#nav-collapse').click();
+  await p.waitForFunction(()=>!PRODUCT.personal.sidebarCollapsed&&!document.body.classList.contains('nav-collapsed'));
+ }
+ checks.push('全局页面入口与侧栏宽窄屏操作');
  await p.evaluate(()=>act('personal-center'));await p.locator('#person-name').fill('我的导演空间');await p.locator('[data-action="u80-settings-tab"][data-id="connections"]').click();await p.locator('#modal-body [data-action="settings"]').click();await p.locator('[data-action="model-new"]').click();await p.locator('#conn-name').fill('未保存的连接');await p.locator('#dialog-back').click();assert.equal(await p.locator('#modal-title').textContent(),'模型中心');await p.locator('#dialog-back').click();assert.equal(await p.locator('#person-name').inputValue(),'我的导演空间');checks.push('嵌套窗口返回保留原表单内容');
  await p.locator('[data-action="u80-settings-tab"][data-id="appearance"]').click();await p.locator('#person-theme').selectOption('system');await p.locator('#person-accent').fill('#834ac9');
  await app.evaluate(({dialog},file)=>{dialog.showOpenDialog=async()=>({canceled:false,filePaths:[file]});},path.resolve('src/assets/brand/guanlan-new.png'));
