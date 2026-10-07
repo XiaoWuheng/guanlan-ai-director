@@ -12,7 +12,15 @@ const {_electron:electron}=require('playwright-core'),assert=require('node:asser
  await p.locator('[data-action="nav-back"]').click();await p.waitForFunction(()=>S.page==='review');assert.equal(await p.evaluate(()=>S.page),'review');await p.locator('[data-action="nav-forward"]').click();await p.waitForFunction(()=>S.page==='delivery');assert.equal(await p.evaluate(()=>S.page),'delivery');assert.ok((await p.locator('.top-stages').boundingBox()).height<=34);assert.equal(await p.locator('.top-stages').evaluate(e=>e.scrollWidth<=e.clientWidth+2),true);await p.evaluate(()=>act('page',{page:'canvas'}));await p.waitForFunction(()=>S.page==='canvas');assert.equal(await p.locator('#nav [data-page="canvas"]').getAttribute('aria-current'),'page');checks.push('顶部线性流程与侧栏独立画布入口、后退和前进恢复');
  await p.evaluate(()=>act('page',{page:'workbench'}));await p.evaluate(()=>act('ws-view',{view:'board'}));await p.evaluate(()=>act('nav-back'));assert.equal(await p.evaluate(()=>WS.view),'studio');checks.push('工作区视图也能返回');
  const pages=await p.locator('#nav [data-page]').evaluateAll(xs=>xs.map(x=>x.dataset.page));for(const page of pages){await p.evaluate(page=>act('page',{page}),page);assert.equal(await p.evaluate(()=>S.page),page);assert.ok((await p.locator('#content').textContent()).length>20);}
- await p.evaluate(()=>act('nav-collapse'));assert.ok(await p.locator('body').evaluate(e=>e.classList.contains('nav-collapsed')));assert.ok((await p.locator('.shell>aside').boundingBox()).width<=64);await p.evaluate(()=>act('nav-collapse'));checks.push('全局页面入口与侧栏收起展开');
+ const collapsedBefore=await p.evaluate(()=>Boolean(PRODUCT.personal.sidebarCollapsed));
+ await p.evaluate(()=>act('nav-collapse'));
+ const collapsedAfter=await p.evaluate(()=>({preference:PRODUCT.personal.sidebarCollapsed,visible:document.body.classList.contains('nav-collapsed')}));
+ assert.deepEqual(collapsedAfter,{preference:!collapsedBefore,visible:!collapsedBefore});
+ if(!collapsedBefore)assert.ok((await p.locator('.shell>aside').boundingBox()).width<=64);
+ await p.evaluate(()=>act('nav-collapse'));
+ const restored=await p.evaluate(()=>({preference:PRODUCT.personal.sidebarCollapsed,visible:document.body.classList.contains('nav-collapsed')}));
+ assert.deepEqual(restored,{preference:collapsedBefore,visible:collapsedBefore});
+ checks.push('全局页面入口与侧栏收起展开');
  await p.evaluate(()=>act('personal-center'));await p.locator('#person-name').fill('我的导演空间');await p.locator('[data-action="u80-settings-tab"][data-id="connections"]').click();await p.locator('#modal-body [data-action="settings"]').click();await p.locator('[data-action="model-new"]').click();await p.locator('#conn-name').fill('未保存的连接');await p.locator('#dialog-back').click();assert.equal(await p.locator('#modal-title').textContent(),'模型中心');await p.locator('#dialog-back').click();assert.equal(await p.locator('#person-name').inputValue(),'我的导演空间');checks.push('嵌套窗口返回保留原表单内容');
  await p.locator('[data-action="u80-settings-tab"][data-id="appearance"]').click();await p.locator('#person-theme').selectOption('system');await p.locator('#person-accent').fill('#834ac9');
  await app.evaluate(({dialog},file)=>{dialog.showOpenDialog=async()=>({canceled:false,filePaths:[file]});},path.resolve('src/assets/brand/guanlan-new.png'));
