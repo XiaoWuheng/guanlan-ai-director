@@ -5,7 +5,7 @@ const {_electron:electron}=require('playwright-core'),assert=require('node:asser
  await new Promise(r=>server.listen(0,'127.0.0.1',r));const env={...process.env,DIRECTOR_DATA_DIR:root,DIRECTOR_HEADLESS:'1'};delete env.ELECTRON_RUN_AS_NODE;
  const app=await electron.launch({executablePath:process.argv[2]?path.resolve(process.argv[2]):require('electron'),args:process.argv[2]?['--disable-backgrounding-occluded-windows']:['--disable-backgrounding-occluded-windows',path.resolve('.')],env}),checks=[],errors=[];
  try{
- const p=await app.firstWindow();p.on('pageerror',e=>errors.push(e.message));await p.waitForFunction(()=>typeof PRODUCT!=='undefined'&&PRODUCT.ready);await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].showInactive());
+  const p=await app.firstWindow();p.on('pageerror',e=>errors.push(e.message));await p.waitForFunction(()=>typeof PRODUCT!=='undefined'&&PRODUCT.ready);await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].showInactive());
  await p.evaluate(()=>act('page',{page:'film'}));await p.waitForFunction(()=>FILM.loaded);assert.ok(await p.locator('[data-action="film-import"]').isVisible());checks.push('无项目可独立进入拉片');
  await p.evaluate(()=>createSample());
  for(const page of ['home','assets','shots','workbench','review','delivery']){await p.locator(`.top-stages [data-page="${page}"]`).click();await p.waitForFunction(x=>S.page===x,page);assert.equal(await p.locator('.top-stages [aria-current="page"]').getAttribute('data-page'),page);}
@@ -17,7 +17,9 @@ const {_electron:electron}=require('playwright-core'),assert=require('node:asser
  if(await p.evaluate(()=>innerWidth<1400)){
   await p.locator('#nav-collapse').click();
   await p.waitForFunction(()=>$('modal').open&&$('modal-title').textContent==='创作方式与资料');
-  await p.evaluate(()=>closeModal());
+  assert.ok(await p.locator('#modal [data-action="ws-go"][data-page="projects"]').isVisible());
+  await p.locator('#modal [data-action="ws-go"][data-page="dashboard"]').click();
+  await p.waitForFunction(()=>!$('modal').open&&S.page==='dashboard');
  }else{
   if(await p.evaluate(()=>Boolean(PRODUCT.personal.sidebarCollapsed)))await p.locator('#nav-collapse').click();
   await p.locator('#nav-collapse').click();
