@@ -1,0 +1,22 @@
+name: 创作流程建议
+description: 说明一个真实创作场景及当前阻碍
+title: "[改进] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: scenario
+    attributes:
+      label: 创作场景与当前步骤
+      description: 描述从哪里开始、做了什么、在哪里被打断。
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: 希望更快完成的任务
+    validations:
+      required: true
+  - type: textarea
+    id: alternative
+    attributes:
+      label: 已尝试的替代方法

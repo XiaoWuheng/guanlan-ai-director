@@ -1,0 +1,97 @@
+{
+  "name": "ai-director-desk",
+  "version": "0.17.4",
+  "description": "观澜 · AI 导演创作工作台",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist:portable": "electron-builder --win portable",
+    "test": "node --test tests/domain.test.cjs tests/model.test.cjs tests/creative.test.cjs tests/location.test.cjs tests/upgrade.test.cjs tests/workspace.test.cjs tests/workstation.test.cjs tests/product-062.test.cjs tests/experience-070.test.cjs tests/catalog-071.test.cjs tests/film-report.test.cjs tests/shot-detection.test.cjs tests/spatial.test.cjs tests/review-fingerprint.test.cjs tests/assistant.test.cjs tests/assistant-conversations.test.cjs tests/asset-library.test.cjs tests/global-library.test.cjs tests/optimization-099.test.cjs tests/skills-010.test.cjs tests/video-generation.test.cjs tests/video-presets.test.cjs tests/canvas-workflow.test.cjs tests/docx-text.test.cjs tests/script-import.test.cjs",
+    "test:desktop": "node tests/desktop.cjs",
+    "dist:public": "electron-builder --config builder-public.cjs --win portable",
+    "release:public-check": "node scripts/check-public-package.cjs",
+    "test:editing": "node tests/editing.cjs",
+    "test:imports": "node tests/imports.cjs",
+    "test:packaged": "node tests/packaged.cjs",
+    "test:creative": "node tests/creative-desktop.cjs",
+    "test:storage": "node tests/location-desktop.cjs",
+    "test:visual": "node tests/visual-ui.cjs",
+    "build:brand": "node scripts/build-brand-icons.cjs",
+    "test:upgrade": "node tests/upgrade-desktop.cjs",
+    "test:performance": "node tests/performance-benchmark.cjs",
+    "release:check": "node scripts/release-check.cjs",
+    "test:workspace": "node tests/workspace-desktop.cjs",
+    "test:workstation": "node tests/workstation-desktop.cjs",
+    "test:product": "node tests/product-062-desktop.cjs",
+    "test:navigation": "node tests/navigation-062.cjs",
+    "test:experience": "node tests/experience-070.cjs",
+    "test:catalog": "node tests/catalog-071-desktop.cjs",
+    "test:workspace-080": "node tests/workspace-080.cjs",
+    "test:film-080": "node tests/film-080.cjs",
+    "test:film-navigation": "node tests/film-navigation.cjs",
+    "test:product-080": "node tests/product-080.cjs",
+    "test:spatial": "node tests/spatial-desktop.cjs",
+    "test:usage": "node tests/usage-skin-prompt.cjs",
+    "test:cinematic": "node tests/skin-cinematic.cjs",
+    "test:results": "node tests/result-batch.cjs",
+    "test:assistant": "node tests/assistant-desktop.cjs && node tests/assistant-stage-desktop.cjs && node tests/assistant-conversations-desktop.cjs",
+    "test:assets": "node tests/asset-library-desktop.cjs",
+    "test:optimization": "node tests/optimization-099.cjs",
+    "test:skills": "node tests/skills-010.cjs",
+    "test:canvas": "node tests/canvas-workflow.test.cjs && node tests/shot-canvas.cjs && node tests/canvas-upgrade.cjs && node tests/canvas-workflow-desktop.cjs && node tests/canvas-free-desktop.cjs && node tests/canvas-layout-desktop.cjs && node tests/canvas-media-desktop.cjs && node tests/canvas-desk-desktop.cjs && node tests/canvas-controls-desktop.cjs && node tests/canvas-immersive-desktop.cjs",
+    "test:dashboard": "node tests/dashboard-desktop.cjs",
+    "test:library": "node tests/global-library.test.cjs && node tests/global-library-desktop.cjs",
+    "test:video": "node tests/video-generation-desktop.cjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "electron": "^44.5.1",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "studio.aidirectordesk",
+    "productName": "观澜",
+    "asar": true,
+    "extraResources": [
+      {
+        "from": "vendor/yt-dlp.exe",
+        "to": "runtime/yt-dlp.exe"
+      },
+      {
+        "from": "vendor/yt-dlp-LICENSE",
+        "to": "runtime/yt-dlp-LICENSE"
+      },
+      {
+        "from": "vendor/yt-dlp-THIRD_PARTY_LICENSES.txt",
+        "to": "runtime/yt-dlp-THIRD_PARTY_LICENSES.txt"
+      },
+      {
+        "from": "vendor/ffmpeg",
+        "to": "runtime/ffmpeg"
+      }
+    ],
+    "files": [
+      "src/**/*",
+      "package.json",
+      "!src/renderer.js",
+      "!src/styles.css",
+      "!src/stage.css"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ],
+      "artifactName": "观澜-${version}-便携版.${ext}",
+      "signExecutable": false,
+      "icon": "src/assets/brand/guanlan.ico"
+    },
+    "electronDist": "node_modules/electron/dist",
+    "directories": {
+      "output": "dist-0174"
+    }
+  },
+  "dependencies": {
+    "adm-zip": "^0.6.1",
+    "pdfjs-dist": "^6.3.289"
+  }
+}

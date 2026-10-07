@@ -1,0 +1,55 @@
+const {_electron}=require('playwright-core');
+const assert=require('node:assert/strict');
+const fs=require('node:fs/promises');
+const os=require('node:os');
+const path=require('node:path');
+
+(async()=>{
+ const root=await fs.mkdtemp(path.join(os.tmpdir(),'guanlan-first-use-'));
+ const script=path.join(root,'scene.txt');
+ await fs.writeFile(script,'第一场，夜，旧车站。林舟等在站台，攥着一封未寄出的信。列车驶近，她抬头，看见多年未见的父亲。','utf8');
+ const env={...process.env,DIRECTOR_DATA_DIR:path.join(root,'data'),DIRECTOR_HEADLESS:'1'};
+ delete env.ELECTRON_RUN_AS_NODE;
+ const app=await _electron.launch({executablePath:require('electron'),args:[path.resolve('.')],env});
+ try{
+  const page=await app.firstWindow(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.waitForSelector('#content [data-action="new-project"]');
+  await page.locator('#content [data-action="new-project"]').click();
+  await page.locator('#new-name').fill('首次使用回归');
+  await page.locator('#modal-submit').click();
+  await page.waitForFunction(()=>S.project?.name==='首次使用回归');
+  assert.equal(await page.locator('#content [data-action="import-script"]').count(),1);
+  await app.evaluate(({dialog},file)=>{dialog.showOpenDialog=async()=>({canceled:false,filePaths:[file]});},script);
+  await page.locator('[data-action="import-script"]').click();
+  await page.waitForFunction(()=>S.project?.script?.includes('旧车站'));
+  assert.equal(await page.locator('.page-head .primary').getAttribute('data-action'),'settings');
+  assert.equal(await page.locator('.first-use-path [data-action="first-shot"]').count(),1);
+  await page.locator('.memory-panel [data-action="analyze"]').click();
+  assert.equal(await page.locator('#modal-title').innerText(),'先连接文字模型');
+  assert.equal(await page.evaluate(()=>S.project.jobs.length),0);
+  await page.evaluate(()=>closeModal());
+  await page.evaluate(()=>act('page',{page:'workbench'}));
+  assert.equal(await page.locator('.first-use-empty').count(),1);
+  await page.evaluate(()=>act('page',{page:'review'}));
+  assert.equal(await page.locator('#content .empty').count(),1);
+  await page.evaluate(()=>act('page',{page:'home'}));
+  await page.locator('.first-use-path [data-action="first-shot"]').click();
+  await page.waitForFunction(()=>S.project.sequences[0]?.segments[0]?.shots.length===1);
+  assert.equal(await page.evaluate(()=>S.project.jobs.length),0);
+  await page.evaluate(()=>act('page',{page:'workbench'}));
+  assert.equal(await page.locator('.ws-studio').count(),1);
+  await page.evaluate(()=>act('page',{page:'delivery'}));
+  assert.equal(await page.locator('[data-studio="adapter"]').count(),0);
+  await page.evaluate(()=>showError(Error('临时操作失败')));
+  assert.equal(await page.locator('#persistent-error').count(),1);
+  await page.waitForTimeout(7250);
+  assert.equal(await page.locator('#persistent-error').count(),0);
+  await page.evaluate(()=>{$('save-status').textContent='保存失败 · 请备份';showError(Error('磁盘暂不可用'));});
+  await page.waitForTimeout(7250);
+  assert.equal(await page.locator('#persistent-error [data-action="rescue-project"]').count(),1);
+  await page.evaluate(()=>persist());
+  assert.equal(await page.locator('#persistent-error').count(),0);
+  assert.deepEqual(errors,[]);
+  console.log('PASS 首次导入、手动第一镜、空交付页与报错自动消失；保存失败保留救援');
+ }finally{await app.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

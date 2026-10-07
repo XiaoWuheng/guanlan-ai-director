@@ -1,0 +1,7 @@
+const fs=require('node:fs/promises'),path=require('node:path');
+module.exports=function usageStore(root){let queue=Promise.resolve();const file=()=>path.join(root(),'model-usage.jsonl');
+ function clean(input){const positive=v=>Math.max(0,Math.min(100000000,Math.floor(Number(v)||0)));return {id:String(input.id||'').slice(0,100),at:String(input.at||new Date().toISOString()),kind:['generation','diagnosis','film'].includes(input.kind)?input.kind:'generation',projectId:String(input.projectId||'').slice(0,120),projectName:String(input.projectName||'').slice(0,100),model:String(input.model||'未知模型').slice(0,160),input:positive(input.input),output:positive(input.output),estimated:!!input.estimated,cost:input.cost!=null&&Number.isFinite(Number(input.cost))&&Number(input.cost)>=0?Number(input.cost):null,currency:['CNY','USD'].includes(input.currency)?input.currency:'CNY'};}
+ async function append(input){const record=clean(input);queue=queue.catch(()=>{}).then(async()=>{await fs.mkdir(path.dirname(file()),{recursive:true});await fs.appendFile(file(),JSON.stringify(record)+'\n','utf8');});await queue;return record;}
+ async function list(){await queue.catch(()=>{});let raw;try{raw=await fs.readFile(file(),'utf8');}catch(e){if(e.code==='ENOENT')return [];throw e;}return raw.split('\n').filter(Boolean).map(line=>{try{return clean(JSON.parse(line));}catch{return null;}}).filter(Boolean);}
+ return {append,list};
+};

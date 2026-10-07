@@ -1,0 +1,52 @@
+const {_electron}=require('@playwright/test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs/promises');
+const os=require('node:os');
+const path=require('node:path');
+
+(async()=>{
+ const root=await fs.mkdtemp(path.join(os.tmpdir(),'guanlan-chats-'));
+ const env={...process.env,DIRECTOR_DATA_DIR:root,DIRECTOR_HEADLESS:'1'};
+ delete env.ELECTRON_RUN_AS_NODE;
+ const app=await _electron.launch({args:[path.resolve('.')],env});
+ try{
+  const page=await app.firstWindow(),errors=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  await page.waitForFunction(()=>typeof PRODUCT!=='undefined'&&PRODUCT.ready&&ASSISTANT.currentId);
+  await page.locator('#assistant-launcher').click();
+  const ask=async q=>{await page.locator('#assistant-input').fill(q);await page.locator('#assistant-input').press('Enter');await page.waitForFunction(()=>!ASSISTANT.busy);};
+  await ask('检查项目进度');
+  const first=await page.locator('#assistant-conversation').inputValue();
+  assert.match(await page.locator('#assistant-messages').innerText(),/检查项目进度/);
+  await page.locator('[data-action="assistant-new"]').click();
+  await page.waitForFunction(id=>ASSISTANT.currentId!==id,first);
+  await page.waitForFunction(()=>document.querySelector('#assistant-conversation')?.value===ASSISTANT.currentId);
+  const second=await page.locator('#assistant-conversation').inputValue();
+  assert.notEqual(first,second);
+  assert.equal(await page.locator('.assistant-message').count(),0);
+  await ask('这个页面怎么用');
+  assert.match(await page.locator('#assistant-messages').innerText(),/这个页面怎么用/);
+  await page.locator('#assistant-conversation').selectOption(first);
+  await page.waitForFunction(id=>ASSISTANT.currentId===id,first);
+  await page.waitForFunction(()=>document.querySelector('#assistant-messages')?.textContent.includes('检查项目进度')&&document.querySelector('#assistant-conversation')?.value===ASSISTANT.currentId);
+  assert.match(await page.locator('#assistant-messages').innerText(),/检查项目进度/);
+  assert.doesNotMatch(await page.locator('#assistant-messages').innerText(),/这个页面怎么用/);
+  await page.reload();
+  await page.waitForFunction(()=>typeof PRODUCT!=='undefined'&&PRODUCT.ready&&ASSISTANT.currentId);
+  await page.locator('#assistant-launcher').click();
+  assert.equal(await page.locator('#assistant-conversation').inputValue(),first);
+  await page.locator('#assistant-conversation').selectOption(second);
+  await page.waitForFunction(id=>ASSISTANT.currentId===id,second);
+  await page.waitForFunction(()=>document.querySelector('#assistant-messages')?.textContent.includes('这个页面怎么用'));
+  assert.match(await page.locator('#assistant-messages').innerText(),/这个页面怎么用/);
+  await page.locator('[data-action="assistant-delete"]').click();
+  assert.match(await page.locator('#modal-title').innerText(),/删除当前对话/);
+  await page.locator('#modal-submit').click();
+  await page.waitForFunction(id=>ASSISTANT.currentId!==id&&ASSISTANT.conversations.length===1,second);
+  await page.waitForFunction(()=>document.querySelectorAll('#assistant-conversation option').length===1);
+  assert.equal(await page.locator('#assistant-conversation option').count(),1);
+  assert.match(await page.locator('#assistant-messages').innerText(),/检查项目进度/);
+  assert.deepEqual(errors,[]);
+  console.log('PASS 澜芯新建、切换、重启恢复及删除独立对话');
+ }finally{await app.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

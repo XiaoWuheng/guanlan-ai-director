@@ -1,0 +1,96 @@
+.canvas-immersive-page{--canvas-accent:#75bcae}
+:root[data-skin="deepsea"] .canvas-immersive-page{--canvas-accent:#8bbfd0}
+:root[data-skin="ink"] .canvas-immersive-page{--canvas-accent:#a6c9af}
+:root[data-skin="stellar"] .canvas-immersive-page{--canvas-accent:#c2b6e0}
+.canvas-immersive-page .shell{grid-template-columns:minmax(0,1fr)!important}
+.canvas-immersive-page .shell>aside{display:none!important}
+.canvas-immersive-page main{height:100vh;overflow:hidden;scrollbar-gutter:auto;background:#101011}
+.canvas-immersive-page.u80 #content:has(.canvas-shell){height:100vh!important;max-width:none;padding:0!important;margin:0!important}
+.canvas-immersive-page .canvas-shell{height:100vh;min-height:0;overflow:hidden;background:#101011}
+.canvas-immersive-page .canvas-body{padding:0!important}
+.canvas-immersive-page .canvas-body .shot-canvas-stage{background-color:#111112;background-image:radial-gradient(circle,#ffffff1c .8px,transparent 1px);background-size:20px 20px}
+.canvas-immersive-page .shot-canvas-links{width:100%;height:100%;overflow:visible}
+.canvas-immersive-page.u80 .canvas-shell>.ws-toolbar{position:absolute!important;top:0!important;left:0!important;right:0!important;width:100%!important;min-height:50px!important;height:50px!important;padding:0 16px!important;gap:10px!important;border:0!important;border-bottom:1px solid #ffffff17!important;border-radius:0!important;background:#19191bcc!important;box-shadow:0 6px 20px #0005!important;backdrop-filter:blur(16px)}
+.canvas-immersive-page .canvas-shell>.ws-toolbar>strong{display:none}
+.canvas-immersive-brand{display:flex;align-items:center;gap:4px;min-width:56px;height:36px;padding:0 5px!important;border:0!important;background:transparent!important;color:var(--canvas-accent)!important}
+.canvas-immersive-brand-mark{display:block;width:30px;height:30px;background:var(--canvas-accent);-webkit-mask:url("assets/brand/guanlan-mark-dark.svg") center/contain no-repeat;mask:url("assets/brand/guanlan-mark-dark.svg") center/contain no-repeat}
+.canvas-immersive-brand-arrow{color:#aaa;font-size:13px}
+.canvas-immersive-page .canvas-desk-identity{max-width:31vw;color:#e0dfe0;font-size:12px;font-weight:600}
+.canvas-immersive-page .canvas-desk-save{font-size:11px;color:#a8aaa9}
+.canvas-immersive-page .canvas-desk-top-actions button{background:#222225;border-color:#ffffff14;color:#c9c9ca}
+.canvas-immersive-page .canvas-desk-top-actions button:hover{border-color:var(--canvas-accent);color:var(--canvas-accent)}
+.canvas-immersive-page .canvas-desk-rail,.canvas-immersive-page .canvas-desk-bottom,.canvas-immersive-add-menu,.canvas-immersive-nav{background:#272729f2;border:1px solid #ffffff1b;box-shadow:0 16px 42px #000a;backdrop-filter:blur(16px)}
+.canvas-immersive-page .canvas-desk-rail{position:absolute;top:50%;left:16px;transform:translateY(-50%);width:56px;max-height:calc(100% - 134px);padding:8px 6px;border-radius:9px;overflow:visible}
+.canvas-immersive-page .canvas-desk-rail:hover,.canvas-immersive-page .canvas-desk-rail:focus-within{width:56px}
+.canvas-immersive-page .canvas-desk-rail>.canvas-desk-rail-divider{margin:8px 4px}
+.canvas-immersive-page .canvas-desk-rail>button{display:grid;place-items:center;width:42px;height:42px;margin:2px 0;border-radius:7px;font-size:18px;line-height:1;color:#bfc0c3;background:#343437;border-color:transparent}
+.canvas-immersive-page .canvas-desk-rail>.canvas-immersive-add-trigger{background:var(--canvas-accent);color:#172023;font-size:28px;box-shadow:0 4px 12px color-mix(in srgb,var(--canvas-accent) 32%,transparent)}
+.canvas-immersive-page .canvas-desk-rail>.canvas-immersive-add-trigger:hover,.canvas-immersive-page .canvas-desk-rail>.canvas-immersive-add-trigger[aria-expanded="true"]{background:color-mix(in srgb,var(--canvas-accent) 80%,white)}
+.canvas-immersive-page .canvas-desk-rail>button::before{display:none}
+.canvas-immersive-add-menu,.canvas-immersive-nav{position:absolute;z-index:15;border-radius:9px;color:#eeeeef}
+.canvas-immersive-add-menu[hidden],.canvas-immersive-nav[hidden]{display:none}
+.canvas-immersive-add-menu{width:194px;max-height:min(520px,calc(100% - 70px));padding:8px;overflow:auto}
+.canvas-immersive-add-menu>small{display:block;padding:7px 10px 5px;color:#8e9094;font-size:10px;letter-spacing:.08em}
+.canvas-immersive-add-menu .canvas-flow-add{display:grid;gap:1px;max-width:none;overflow:visible}
+.canvas-immersive-add-menu button{display:flex;align-items:center;width:100%;min-height:34px;padding:4px 10px;border:0;border-radius:6px;background:transparent;color:#d3d3d5;text-align:left;font-size:12px;white-space:nowrap}
+.canvas-immersive-add-menu button::before{content:attr(data-immersive-icon);display:inline-grid;place-items:center;width:25px;margin-right:8px;font-size:16px;color:#aaa}
+.canvas-immersive-add-menu button:hover{background:#414144;color:#fff}
+.canvas-immersive-add-menu button:hover::before{color:var(--canvas-accent)}
+.canvas-immersive-nav{left:16px;top:54px;width:190px;display:grid;gap:4px;padding:10px}
+.canvas-immersive-nav strong{padding:7px 5px 9px;border-bottom:1px solid #ffffff1b;font-size:12px}
+.canvas-immersive-nav button{width:100%;justify-content:flex-start;text-align:left;background:transparent;border:0;color:#ddd}
+.canvas-immersive-nav button:hover{background:#414144}
+.canvas-immersive-page .canvas-desk-bottom{left:50%;bottom:18px;transform:translateX(-50%);gap:2px;max-width:calc(100% - 32px);padding:5px;border-radius:8px}
+.canvas-immersive-page .canvas-desk-bottom button{display:grid;place-items:center;width:38px;height:34px;min-height:34px;padding:0;border:0;background:transparent;color:#bcbdbf;font-size:0}
+.canvas-immersive-page .canvas-desk-bottom button::before{content:attr(data-immersive-icon);font-size:19px;line-height:1}
+.canvas-immersive-page .canvas-desk-bottom button:hover,.canvas-immersive-page .canvas-desk-bottom button[aria-pressed="true"]{color:var(--canvas-accent);background:#ffffff12}
+.canvas-immersive-page .canvas-desk-bottom button:disabled{opacity:.3}
+.canvas-immersive-page .canvas-desk-scale{min-width:44px;color:#b7b7ba;font-size:12px}
+.canvas-immersive-page .canvas-graph-node,.canvas-immersive-page .shot-canvas-node{width:284px;min-height:235px;padding:10px 11px;border:1px solid #48484b;border-radius:9px;background:#252527;box-shadow:0 14px 32px #0008,inset 0 1px #ffffff0c;color:#e7e7e8}
+.canvas-immersive-page .canvas-graph-node:hover,.canvas-immersive-page .shot-canvas-node:hover{border-color:#717176;box-shadow:0 18px 38px #0009,inset 0 1px #ffffff14}
+.canvas-immersive-page .canvas-graph-node.selected,.canvas-immersive-page .shot-canvas-node.selected{border-color:var(--canvas-accent);box-shadow:0 0 0 1px color-mix(in srgb,var(--canvas-accent) 66%,transparent),0 18px 42px #000a}
+.canvas-immersive-page .canvas-graph-head{display:flex;align-items:center;gap:6px;min-height:30px;padding:0 2px 8px;border:0}
+.canvas-immersive-page .canvas-graph-head>span:first-child{font-size:10px;color:#a7a8aa;letter-spacing:0}
+.canvas-immersive-page .canvas-graph-head>strong{font-size:12px;font-weight:600}
+.canvas-immersive-node-tools{display:flex;gap:2px;margin-left:auto}
+.canvas-immersive-node-tools button{width:24px;height:24px;min-width:24px;padding:0;border:0;background:transparent;color:#b5b5b7;font-size:0}
+.canvas-immersive-node-tools button::before{font-size:14px}
+.canvas-immersive-node-tools [data-action="canvas-node-copy"]::before{content:'⧉';font-size:16px}
+.canvas-immersive-node-tools [data-action="flow-delete"]::before{content:'×';font-size:20px}
+.canvas-immersive-node-tools button:hover{color:#fff;background:#ffffff15}
+.canvas-immersive-preview{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;min-height:126px;margin:2px 0 8px;border:1px solid #ffffff0e;border-radius:6px;background:#313133;overflow:hidden;text-align:center}
+.canvas-immersive-preview .canvas-immersive-symbol{font-size:51px;font-weight:300;line-height:1;color:#949498}
+.canvas-immersive-preview p{margin:0;padding:0 14px;color:#cacace;font-size:11px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.canvas-immersive-preview button{width:calc(100% - 28px);min-height:28px;background:#3a3a3e;color:#ddd;border:0;font-size:11px}
+.canvas-immersive-preview img{display:block;width:100%;height:126px;object-fit:cover}
+.canvas-immersive-page .canvas-immersive-card>p,.canvas-immersive-page .canvas-immersive-card>.canvas-flow-thumb{display:none}
+.canvas-immersive-page .canvas-immersive-card>small{display:block;margin:4px 2px 9px;font-size:10px}
+.canvas-immersive-page .canvas-graph-actions{display:flex;gap:4px;margin:6px 0 0;flex-wrap:wrap}
+.canvas-immersive-page .canvas-graph-actions button{min-height:27px;padding:4px 7px;border:0;border-radius:4px;background:#3a3a3e;color:#d6d6d9;font-size:10px}
+.canvas-immersive-page .canvas-graph-actions button:hover{background:#515157;color:#fff}
+.canvas-immersive-page .canvas-graph-actions button.primary{background:var(--canvas-accent);color:#172023}
+.canvas-immersive-page .canvas-media-body{min-height:126px;margin:2px 0 8px;background:#303032;border:1px solid #ffffff0e}
+.canvas-immersive-page .canvas-media-preview,.canvas-immersive-page .canvas-media-video{height:126px;max-height:126px;object-fit:cover}
+.canvas-immersive-page .canvas-media-audio{height:126px;padding:20px 8px}
+.canvas-immersive-page .canvas-reference-node{min-height:235px}
+.canvas-immersive-page .canvas-reference-node>.row{font-size:10px;color:#b7b8ba}
+.canvas-immersive-ref-art{display:flex;align-items:center;justify-content:center;gap:11px;min-height:100px;margin:8px 0;border:1px solid #ffffff0e;border-radius:6px;background:#303032;color:#999a9e}
+.canvas-immersive-ref-art span{font-size:36px;color:#c2a0b0}
+.canvas-immersive-ref-art small{font-size:12px}
+.canvas-immersive-page .canvas-reference-node p{display:none}
+.canvas-immersive-page .canvas-port{width:17px;height:17px;min-width:17px;top:74px;border-radius:50%;font-size:0;background:#343438;border:2px solid #9d9fa3}
+.canvas-immersive-page .canvas-port::before{content:'';display:block;width:5px;height:5px;margin:auto;border-radius:50%;background:#d4d4d5}
+.canvas-immersive-page .canvas-port-in{left:-9px}.canvas-immersive-page .canvas-port-out{right:-9px}
+.canvas-immersive-page .canvas-port:hover,.canvas-immersive-page .canvas-port.armed{border-color:var(--canvas-accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--canvas-accent) 20%,transparent)}
+.canvas-immersive-page .canvas-workflow-edge{stroke:#a6a4a9!important;stroke-width:1.6!important;opacity:.72}
+.canvas-immersive-page .canvas-desk-panel,.canvas-immersive-page .canvas-inspector{background:#28282af2;border-color:#ffffff22;color:#ededee}
+.canvas-immersive-page .canvas-shell>.canvas-filters{top:58px}
+.canvas-immersive-page .canvas-desk-panel{top:58px}
+.canvas-immersive-page .canvas-empty{gap:10px;width:min(460px,calc(100% - 112px));padding:32px 34px;border-style:solid;border-color:#ffffff20;background:#222326f0;box-shadow:0 22px 62px #0007;pointer-events:auto}
+.canvas-immersive-page .canvas-empty small{color:var(--canvas-accent);font-size:10px;font-weight:700;letter-spacing:.15em}
+.canvas-immersive-page .canvas-empty strong{font-size:20px;line-height:1.35}
+.canvas-immersive-page .canvas-empty span{max-width:34em;margin:auto;line-height:1.7}
+.canvas-immersive-page .canvas-empty button{align-self:center;min-height:40px;margin-top:8px;padding:8px 16px;pointer-events:auto;background:var(--canvas-accent);border-color:var(--canvas-accent);color:#182326}
+.canvas-immersive-page .canvas-empty button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+@media(max-width:900px){.canvas-immersive-page .canvas-desk-identity{max-width:24vw}.canvas-immersive-page .canvas-desk-save{display:none}.canvas-immersive-page .canvas-desk-top-actions{gap:3px}.canvas-immersive-page .canvas-desk-top-actions button{padding:3px 6px;font-size:10px}.canvas-immersive-page .canvas-desk-rail{left:8px}.canvas-immersive-page .canvas-desk-bottom{bottom:8px}.canvas-immersive-page .canvas-inspector{width:min(300px,calc(100% - 16px))}}
+@media(max-width:620px){.canvas-immersive-page .canvas-desk-identity{display:none}.canvas-immersive-page .canvas-desk-top-actions [data-action="canvas-desk-filter"]{display:none}.canvas-immersive-page .canvas-desk-bottom{left:8px;right:8px;transform:none;max-width:none}}

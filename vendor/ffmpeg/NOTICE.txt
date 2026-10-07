@@ -1,0 +1,13 @@
+FFmpeg binary distribution notice
+
+Binary: FFmpeg n8.1.3-14-g330caae0c1-20261006, win64 LGPL shared build
+Build provider: https://github.com/BtbN/FFmpeg-Builds
+Downloaded archive: https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n8.1-latest-win64-lgpl-shared-8.1.zip
+Archive SHA-256: 1e6425b7ff240d2264ef81d37e667f398f9863c79c867ac836645df65044a14b
+FFmpeg source code: https://github.com/FFmpeg/FFmpeg/tree/n8.1.3
+Build scripts and configuration: https://github.com/BtbN/FFmpeg-Builds
+
+The bundled FFmpeg program and libraries are separate executables and libraries,
+not part of the MIT-licensed Guanlan application code. See LICENSE.txt and
+COPYING.GPLv3 in this folder. The package retains the shared DLLs so users can
+replace them with compatible modified versions.

@@ -1,0 +1,4 @@
+const {test}=require('node:test'),assert=require('node:assert/strict'),detector=require('../src/shot-detection');
+test('isolated hard cuts are found while sustained camera movement is not split repeatedly',()=>{const scores=[0,.04,.05,.42,.05,.19,.20,.21,.18,.20,.62,.06];const cuts=detector.analyze(scores.map((score,time)=>({time,score})));assert.deepEqual(cuts.map(x=>x.time),[3,10]);assert.ok(cuts.every(x=>x.confidence>=.35&&x.confidence<=.98));});
+test('minimum spacing and invalid sample scores are handled',()=>{const scores=[0,.4,.02,.5,.02].map((score,i)=>({time:i*.2,score}));assert.equal(detector.analyze(scores,{minSeconds:.5}).length,1);assert.deepEqual(detector.analyze([{time:0,score:0},{time:1,score:NaN}]),[]);});
+test('pixel difference uses normalized RGB and ignores alpha',()=>{const a=new Uint8ClampedArray([0,0,0,255,255,255,255,255]),b=new Uint8ClampedArray([255,255,255,0,255,255,255,0]);assert.equal(detector.difference(a,b),.5);});

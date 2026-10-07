@@ -1,0 +1,26 @@
+.study-view-tabs{display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--line);margin:4px 0 16px;padding-bottom:8px}
+.study-view-tabs button{white-space:nowrap;flex:0 0 auto}
+.study-view-tabs button.active{color:var(--brand);border-color:var(--brand);background:var(--soft)}
+.study-view-body{min-height:310px}
+.study-view-body h3{margin:0 0 14px;font-size:15px}
+.study-view-body h3 small{color:var(--muted);font-size:12px}
+.study-overview{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0}
+.study-overview-card{display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-height:132px;padding:16px;gap:9px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.study-overview-card:hover,.study-overview-card:focus-visible{border-color:var(--brand);background:var(--soft)}
+.study-overview-card span{font-size:12px;color:var(--muted)}
+.study-overview-card strong{font-size:21px}
+.study-overview-card small{font-size:12px;line-height:1.5;color:var(--muted)}
+.study-section-head{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:12px}
+.study-section-head h3{margin:0}
+.study-preview-hint{border:1px dashed var(--line);border-radius:8px;padding:24px;color:var(--muted);line-height:1.6;margin:14px 0}
+.study-image-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px}
+.study-image-list>div{display:flex;gap:6px;min-width:0}
+.study-image-list button:first-child{flex:1;min-width:0}
+.study-episode{border-left:3px solid transparent}
+.study-episode.active{border-left-color:var(--brand)}
+.film-link-source{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 12px;margin:4px 0 10px;border-left:2px solid var(--brand);background:var(--surface);color:var(--muted);font-size:12px}
+.film-auto-evidence{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:7px 10px;margin:4px 0 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);font-size:12px;color:var(--muted)}
+.film-auto-evidence strong{color:var(--ink);margin-right:3px}
+.film-quick-nav{display:flex;align-items:center;justify-content:flex-end;gap:4px;flex-wrap:wrap}
+.film-quick-nav button{white-space:nowrap}
+@media(max-width:640px){.study-overview{grid-template-columns:1fr}.study-view-tabs{margin-right:-12px}}

@@ -1,0 +1,50 @@
+const {_electron}=require('playwright-core');
+const assert=require('node:assert/strict');
+const fs=require('node:fs/promises');
+const os=require('node:os');
+const path=require('node:path');
+
+(async()=>{
+ const root=await fs.mkdtemp(path.join(os.tmpdir(),'guanlan-099-'));
+ const now=new Date().toISOString();
+ const rows=['甲片','乙片'].map((name,i)=>({id:'diag_test_'+i,name,source:path.join(root,name+'.mp4'),createdAt:now,updatedAt:now,goal:'',audience:'',format:'',concerns:'',observation:'',summary:'',issues:'',plan:'',model:'',reviewed:false}));
+ await fs.writeFile(path.join(root,'diagnoses.json'),JSON.stringify(rows));
+ const env={...process.env,DIRECTOR_DATA_DIR:root,DIRECTOR_HEADLESS:'1'};delete env.ELECTRON_RUN_AS_NODE;
+ const exe=process.argv[2]&&path.resolve(process.argv[2]);
+ const app=await _electron.launch({executablePath:exe||require('electron'),args:exe?[]:[path.resolve('.')],env});
+ try{
+  const page=await app.firstWindow(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await page.waitForFunction(()=>typeof PRODUCT!=='undefined'&&PRODUCT.ready&&typeof DIAG!=='undefined');
+  await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].showInactive());
+  await page.evaluate(()=>act('page',{page:'diagnosis'}));
+  await page.waitForFunction(()=>DIAG.loaded&&document.querySelector('#diag-goal'));
+  await page.locator('#diag-goal').fill('观众看见钥匙交接的因果');
+  await page.locator('#diag-observation').fill('00:03 人物手部停顿');
+  await page.evaluate(()=>act('diagnosis-select',{id:'diag_test_1'}));
+  assert.equal(await page.locator('#diag-goal').inputValue(),'');
+  await page.evaluate(()=>act('diagnosis-select',{id:'diag_test_0'}));
+  assert.equal(await page.locator('#diag-goal').inputValue(),'观众看见钥匙交接的因果');
+  await page.evaluate(()=>act('page',{page:'home'}));
+  const saved=JSON.parse(await fs.readFile(path.join(root,'diagnoses.json'),'utf8'));
+  assert.equal(saved[0].observation,'00:03 人物手部停顿');
+  assert.equal(await page.locator('[data-action="creative-tools"]').count(),0);
+  await page.evaluate(()=>createSample());
+  await page.locator('#assistant-launcher').click();
+  assert.match(await page.locator('#assistant-panel').textContent(),/澜芯/);
+  await page.locator('[data-action="assistant-dock"]').click();
+  assert.equal(await page.evaluate(()=>document.body.classList.contains('assistant-docked')),true);
+  const bounds=await page.locator('#assistant-panel').evaluate(el=>({right:el.getBoundingClientRect().right,viewport:innerWidth,shell:document.querySelector('.shell').getBoundingClientRect().right,left:el.getBoundingClientRect().left}));
+  assert.ok(bounds.right<=bounds.viewport+1&&bounds.shell<=bounds.left+1,JSON.stringify(bounds));
+  const cancelVisible=await page.evaluate(()=>{const bar=$('jobbar'),button=bar.querySelector('[data-action="cancel-job"]');bar.style.display='flex';const r=button.getBoundingClientRect(),hit=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);bar.style.display='none';return hit===button||button.contains(hit);});
+  assert.ok(cancelVisible,'任务停止按钮不能被澜芯遮挡');
+  const evidence=path.resolve('audit-evidence/visual-099');await fs.mkdir(evidence,{recursive:true});await page.screenshot({path:path.join(evidence,'lanxin-docked.png')});
+  await page.locator('#assistant-input').fill('检查项目进度');await page.locator('#assistant-input').press('Enter');
+  await page.waitForFunction(()=>!ASSISTANT.busy);
+  await page.waitForFunction(async()=>{const r=await call('assistant:history:get');return r.some(x=>x.text==='检查项目进度');});
+  await app.evaluate(({BrowserWindow})=>{const w=BrowserWindow.getAllWindows()[0];w.setSize(1050,720);w.webContents.setZoomFactor(1.25);});
+  const narrow=await page.locator('#assistant-panel').evaluate(el=>({right:el.getBoundingClientRect().right,bottom:el.getBoundingClientRect().bottom,width:innerWidth,height:innerHeight,scroll:document.body.scrollWidth}));
+  assert.ok(narrow.right<=narrow.width+2&&narrow.bottom<=narrow.height+2&&narrow.scroll<=narrow.width+2,JSON.stringify(narrow));
+  assert.deepEqual(errors,[]);
+  console.log('PASS 诊断切换前保存、页面离开保存、重复入口收敛、澜芯停靠与记录入库');
+ }finally{await app.evaluate(({app})=>app.exit(0)).catch(()=>{});await app.close().catch(()=>{});}
+})().catch(e=>{console.error(e);process.exitCode=1;});

@@ -1,0 +1,30 @@
+name: 问题报告
+description: 报告可复现的功能或界面问题
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: 观澜版本与 Windows 版本
+      placeholder: "例如 0.10.1 / Windows 11"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 请使用不含真实剧本、密钥或个人素材的示例。
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望结果与实际结果
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 可选截图或日志
+      description: 提交前请移除本机路径、账号、密钥和未授权素材。

@@ -1,0 +1,7 @@
+const AdmZip=require('adm-zip');
+
+const MAX_XML=40*1024*1024;
+const MAX_TEXT=8*1024*1024;
+function decode(value){return value.replace(/&(#x[0-9a-f]+|#[0-9]+|amp|lt|gt|quot|apos);/gi,(_,entity)=>{const lower=entity.toLowerCase();if(lower[0]==='#'){const code=lower[1]==='x'?parseInt(lower.slice(2),16):parseInt(lower.slice(1),10);return code>0&&code<=0x10ffff&&!(code>=0xd800&&code<=0xdfff)?String.fromCodePoint(code):'�';}return {amp:'&',lt:'<',gt:'>',quot:'"',apos:"'"}[lower];});}
+function extract(buffer){let zip;try{zip=new AdmZip(buffer);}catch{throw Error('Word 文档无法打开，请检查文件是否损坏');}const entry=zip.getEntry('word/document.xml');if(!entry||entry.isDirectory)throw Error('Word 文档缺少正文，请导出为 DOCX 后重试');if(entry.header.size>MAX_XML)throw Error('Word 正文超过 40MB，请拆分后导入');let xml;try{const data=entry.getData();if(data.length>MAX_XML)throw Error('Word 正文超过 40MB，请拆分后导入');xml=data.toString('utf8');}catch(e){if(e.message.includes('超过'))throw e;throw Error('Word 正文读取失败，请检查文件是否损坏');}const parts=[];let size=0;const tokens=/<w:t\b[^>]*>([\s\S]*?)<\/w:t>|<w:tab\b[^>]*\/?\s*>|<w:(?:br|cr)\b[^>]*\/?\s*>|<\/w:(?:p|tr)>|<\/w:tc>/gi;for(const match of xml.matchAll(tokens)){let value;if(match[1]!==undefined)value=decode(match[1]);else if(/^<w:tab\b/i.test(match[0])||/^<\/w:tc>/i.test(match[0]))value='\t';else value='\n';size+=value.length;if(size>MAX_TEXT)throw Error('Word 正文超过 800 万字，请拆分后导入');parts.push(value);}const text=parts.join('').replace(/[\t ]+\n/g,'\n').replace(/\n{4,}/g,'\n\n\n').trim();if(!text)throw Error('Word 文档没有可提取的正文文字');return text;}
+module.exports={extract};

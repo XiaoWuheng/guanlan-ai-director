@@ -1,0 +1,33 @@
+name: Windows verification
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm audit --omit=dev
+      - run: npm run test:imports
+      - run: npm run test:canvas
+      - run: npm run test:dashboard
+      - run: npm run test:desktop
+      - run: npm run test:video
+      - run: npm run test:visual
+      - run: npm run test:experience
+      - run: npm run test:catalog
+      - run: npm run test:assistant
+      - run: npm run test:usage
+      - run: npm run test:cinematic
+      - run: npm run test:results
+      - run: node tests/layout-resilience.cjs
+      - run: npm run dist:public
+      - run: npm run release:public-check
+      - run: node tests/packaged.cjs dist-public-current/win-unpacked/观澜.exe --public
+      - run: node tests/result-batch.cjs dist-public-current/win-unpacked/观澜.exe --public

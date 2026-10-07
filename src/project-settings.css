@@ -1,0 +1,5 @@
+#modal-body [hidden],#modal-body input[type="hidden"]{display:none!important}
+#ps-model-hint{margin:8px 0 4px;padding:10px 12px;border:1px solid var(--border);border-radius:6px;background:var(--surface);font-size:12px;line-height:20px}
+.project-budget-help{margin:8px 0 16px;padding:10px 12px;border:1px solid var(--border);border-radius:6px}
+.project-budget-help summary{margin:0}
+.project-budget-help p{margin:8px 0 0;color:var(--muted);font-size:12px;line-height:20px}
