@@ -36,7 +36,10 @@ const assert=require('node:assert/strict');
     await app.evaluate(({BrowserWindow})=>BrowserWindow.getAllWindows()[0].maximize());
     await snapshot('maximized');
     await page.evaluate(()=>act('nav-collapse'));
-    await snapshot('maximized-collapsed');
+    if(await page.evaluate(()=>$('modal').open)){
+      await snapshot('maximized-navigation');
+      await page.evaluate(()=>closeModal());
+    }else await snapshot('maximized-collapsed');
     await app.evaluate(({BrowserWindow})=>{const w=BrowserWindow.getAllWindows()[0];w.unmaximize();w.setSize(1050,720);});
     await snapshot('minimum');
     await page.locator('.ws-toolbar .more-menu summary').click();
