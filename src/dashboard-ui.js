@@ -52,9 +52,18 @@ function canvasStudioVideos(){
  }
 }
 function canvasStudioCloseButton(){const inspector=$('canvas-inspector');if(inspector&&!inspector.querySelector('[data-action="canvas-inspector-close"]'))inspector.insertAdjacentHTML('afterbegin',btn('×','canvas-inspector-close','aria-label="关闭节点详情" title="关闭节点详情"','canvas-inspector-close'));}
+function canvasStudioPlaceInspector(){
+ const shell=document.querySelector('.canvas-shell'),inspector=$('canvas-inspector');
+ if(!shell?.classList.contains('has-selection')||!inspector)return;
+ inspector.classList.remove('canvas-inspector-left');
+ const panel=inspector.getBoundingClientRect();
+ const overlaps=rect=>rect.left<panel.right&&rect.right>panel.left&&rect.top<panel.bottom&&rect.bottom>panel.top;
+ const nodes=[...shell.querySelectorAll('.canvas-graph-node,.shot-canvas-node')].filter(node=>overlaps(node.getBoundingClientRect()));
+ if(nodes.length)inspector.classList.add('canvas-inspector-left');
+}
 const dashboardCanvasShotSelect=canvasUpSelect;
-canvasUpSelect=function(id){dashboardCanvasShotSelect(id);if(!CANVAS_STUDIO.rendering){CANVAS_STUDIO.inspectorOpen=true;document.querySelector('.canvas-shell')?.classList.add('has-selection');canvasStudioCloseButton();}};
+canvasUpSelect=function(id){dashboardCanvasShotSelect(id);if(!CANVAS_STUDIO.rendering){CANVAS_STUDIO.inspectorOpen=true;document.querySelector('.canvas-shell')?.classList.add('has-selection');canvasStudioCloseButton();canvasStudioPlaceInspector();}};
 const dashboardCanvasNodeSelect=flowSelect;
-flowSelect=function(id){dashboardCanvasNodeSelect(id);if(!CANVAS_STUDIO.rendering){CANVAS_STUDIO.inspectorOpen=true;document.querySelector('.canvas-shell')?.classList.add('has-selection');canvasStudioCloseButton();}};
+flowSelect=function(id){dashboardCanvasNodeSelect(id);if(!CANVAS_STUDIO.rendering){CANVAS_STUDIO.inspectorOpen=true;document.querySelector('.canvas-shell')?.classList.add('has-selection');canvasStudioCloseButton();canvasStudioPlaceInspector();}};
 registerAction('canvas-inspector-close',()=>{CANVAS_STUDIO.inspectorOpen=false;CANVAS_UP.selected=null;CANVAS_FLOW.selected=null;document.querySelector('.canvas-shell')?.classList.remove('has-selection');document.querySelectorAll('.shot-canvas-node,.canvas-graph-node').forEach(n=>n.classList.remove('selected'));});
-render=function(){if(S.page!=='canvas')CANVAS_STUDIO.inspectorOpen=false;CANVAS_STUDIO.rendering=true;try{dashboardBaseRender();}finally{CANVAS_STUDIO.rendering=false;}const nav=$('nav');if(nav&&!nav.querySelector('[data-page="dashboard"]'))nav.insertAdjacentHTML('afterbegin',`<div class="dashboard-nav-entry">${navItem('dashboard','首页')}</div>`);document.body.classList.toggle('dashboard-page',S.page==='dashboard');const shell=document.querySelector('.canvas-shell');if(shell&&$('canvas-inspector')){shell.classList.toggle('has-selection',CANVAS_STUDIO.inspectorOpen);canvasStudioCloseButton();canvasStudioVideos();}};
+render=function(){if(S.page!=='canvas')CANVAS_STUDIO.inspectorOpen=false;CANVAS_STUDIO.rendering=true;try{dashboardBaseRender();}finally{CANVAS_STUDIO.rendering=false;}const nav=$('nav');if(nav&&!nav.querySelector('[data-page="dashboard"]'))nav.insertAdjacentHTML('afterbegin',`<div class="dashboard-nav-entry">${navItem('dashboard','首页')}</div>`);document.body.classList.toggle('dashboard-page',S.page==='dashboard');const shell=document.querySelector('.canvas-shell');if(shell&&$('canvas-inspector')){shell.classList.toggle('has-selection',CANVAS_STUDIO.inspectorOpen);canvasStudioCloseButton();canvasStudioVideos();canvasStudioPlaceInspector();}};

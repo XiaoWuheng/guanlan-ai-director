@@ -56,6 +56,7 @@
 .canvas-desk-row button{margin-top:6px}
 .canvas-desk-empty{padding:28px 16px;color:var(--muted);font-size:12px;line-height:1.6}
 .canvas-desk-page .canvas-inspector{display:none;right:8px;top:76px;bottom:8px;width:310px}
+.canvas-desk-page .canvas-inspector.canvas-inspector-left{left:72px;right:auto}
 .canvas-desk-page .canvas-shell.has-selection .canvas-inspector{display:block}
 .canvas-desk-page .canvas-shell:has(.shot-canvas-node) .canvas-inspector{top:136px}
 @media(max-width:1180px){.canvas-desk-page .canvas-shell>.ws-toolbar{position:relative;top:auto;left:auto;right:auto;width:100%;border-radius:10px;flex-shrink:0}.canvas-desk-rail{top:72px;left:8px}.canvas-desk-page .canvas-shell:has(.shot-canvas-node) .canvas-desk-rail{top:134px}.canvas-desk-page .canvas-shell>.canvas-filters{position:relative;top:auto;left:auto;right:auto;width:100%;max-width:none;border-radius:8px;flex-shrink:0}.canvas-desk-panel{top:72px;right:8px}.canvas-desk-page .canvas-body{padding-right:0}.canvas-desk-page .canvas-inspector{display:none}.canvas-desk-page .canvas-shell.has-selection .canvas-inspector{display:block;top:72px}}
