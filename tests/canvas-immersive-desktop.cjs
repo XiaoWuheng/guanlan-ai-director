@@ -42,6 +42,8 @@ const path=require('node:path');
   const copied=await page.evaluate(()=>S.project.canvasGraph.nodes.find(n=>n.title.includes('副本')));
   assert.match(copied.title,/生成.*副本/);
   assert.ok(copied.x>=1000,'复制节点应与源节点错开');
+  assert.equal(await page.locator('#canvas-inspector').isVisible(),false,'复制节点不应自动弹出遮挡卡片的详情');
+  await page.locator('[data-flow-node="bound-preview-test"]').click({position:{x:20,y:20}});
   await page.locator('[data-action="canvas-inspector-close"]').click();
   await page.screenshot({path:path.resolve('docs/assets/canvas-immersive.png')});
   await page.locator('[data-action="canvas-immersive-nav"]').click();

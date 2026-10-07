@@ -41,6 +41,6 @@ document.addEventListener('keydown',event=>{if(S.page!=='canvas'||$('modal')?.op
 const canvasDeskApplyBase=canvasApply;
 canvasApply=function(){canvasDeskApplyBase();const scale=document.querySelector('.canvas-desk-scale');if(scale&&S.project)scale.textContent=Math.round(canvasViewport().z*100)+'%';};
 const canvasDeskFlowSelectBase=flowSelect;
-flowSelect=function(id){canvasDeskFlowSelectBase(id);canvasDeskLinkFilter();};
+flowSelect=function(id,openInspector=false){canvasDeskFlowSelectBase(id,openInspector);canvasDeskLinkFilter();};
 const canvasDeskShotSelectBase=canvasUpSelect;
 canvasUpSelect=function(id){canvasDeskShotSelectBase(id);canvasDeskLinkFilter();};
