@@ -52,6 +52,7 @@ function canvasStudioVideos(){
  }
 }
 function canvasStudioCloseButton(){const inspector=$('canvas-inspector');if(inspector&&!inspector.querySelector('[data-action="canvas-inspector-close"]'))inspector.insertAdjacentHTML('afterbegin',btn('×','canvas-inspector-close','aria-label="关闭节点详情" title="关闭节点详情"','canvas-inspector-close'));}
+function canvasStudioDismissInspector(){CANVAS_STUDIO.inspectorOpen=false;CANVAS_UP.selected=null;CANVAS_FLOW.selected=null;document.querySelector('.canvas-shell')?.classList.remove('has-selection');document.querySelectorAll('.shot-canvas-node,.canvas-graph-node').forEach(node=>node.classList.remove('selected'));}
 function canvasStudioPlaceInspector(){
  const shell=document.querySelector('.canvas-shell'),inspector=$('canvas-inspector');
  if(!shell?.classList.contains('has-selection')||!inspector)return;
@@ -65,5 +66,5 @@ const dashboardCanvasShotSelect=canvasUpSelect;
 canvasUpSelect=function(id){dashboardCanvasShotSelect(id);if(!CANVAS_STUDIO.rendering){CANVAS_STUDIO.inspectorOpen=true;document.querySelector('.canvas-shell')?.classList.add('has-selection');canvasStudioCloseButton();canvasStudioPlaceInspector();}};
 const dashboardCanvasNodeSelect=flowSelect;
 flowSelect=function(id){dashboardCanvasNodeSelect(id);if(!CANVAS_STUDIO.rendering){CANVAS_STUDIO.inspectorOpen=true;document.querySelector('.canvas-shell')?.classList.add('has-selection');canvasStudioCloseButton();canvasStudioPlaceInspector();}};
-registerAction('canvas-inspector-close',()=>{CANVAS_STUDIO.inspectorOpen=false;CANVAS_UP.selected=null;CANVAS_FLOW.selected=null;document.querySelector('.canvas-shell')?.classList.remove('has-selection');document.querySelectorAll('.shot-canvas-node,.canvas-graph-node').forEach(n=>n.classList.remove('selected'));});
+registerAction('canvas-inspector-close',canvasStudioDismissInspector);
 render=function(){if(S.page!=='canvas')CANVAS_STUDIO.inspectorOpen=false;CANVAS_STUDIO.rendering=true;try{dashboardBaseRender();}finally{CANVAS_STUDIO.rendering=false;}const nav=$('nav');if(nav&&!nav.querySelector('[data-page="dashboard"]'))nav.insertAdjacentHTML('afterbegin',`<div class="dashboard-nav-entry">${navItem('dashboard','首页')}</div>`);document.body.classList.toggle('dashboard-page',S.page==='dashboard');const shell=document.querySelector('.canvas-shell');if(shell&&$('canvas-inspector')){shell.classList.toggle('has-selection',CANVAS_STUDIO.inspectorOpen);canvasStudioCloseButton();canvasStudioVideos();canvasStudioPlaceInspector();}};

@@ -33,6 +33,7 @@ const path = require('node:path');
     await page.locator('#canvas-search').fill('');
     await page.locator('[data-action="canvas-focus"]').click();
     await page.locator('[data-action="canvas-fit"]').click();
+    assert.equal(await page.locator('#canvas-inspector').isVisible(),false,'适配全画布后详情面板不应遮住节点');
     await page.locator('.shot-canvas-node').first().click({position:{x:20,y:20}});
     await page.locator('[data-action="canvas-open-asset"]').first().click();
     await page.waitForFunction(()=>S.page==='assets'&&S.assetId===S.project.assets[0].id);
